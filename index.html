@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kamran Car</title>
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F7FAFF;--white:#FFFFFF;--border:#E8EDF5;--border2:#D1E4FF;
+  --text:#1A1A2E;--text2:#4B5563;--muted:#9CA3AF;
+  --blue:#60A5FA;--blue2:#3B82F6;--green:#34D399;--green2:#10B981;
+  --red:#F87171;--yellow:#FBBF24;
+  --shadow:0 1px 4px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md:0 2px 8px rgba(0,0,0,0.07),0 8px 28px rgba(0,0,0,0.05);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(ellipse 100% 60% at 10% 0%,rgba(219,234,254,0.5),transparent),radial-gradient(ellipse 80% 50% at 90% 100%,rgba(209,250,229,0.3),transparent);
+  color:var(--text);font-family:'Inter',system-ui,sans-serif;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+}
+header{
+  width:100%;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;
+  box-shadow:0 1px 0 var(--border);
+}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 2px 10px rgba(96,165,250,0.3)}
+header h1{font-size:1.05rem;font-weight:800;letter-spacing:-.4px;color:var(--text)}
+header p{font-size:.68rem;color:var(--muted);margin-top:1px}
+.header-badge{background:linear-gradient(135deg,rgba(96,165,250,0.1),rgba(52,211,153,0.1));border:1px solid rgba(96,165,250,0.25);border-radius:20px;padding:5px 14px;font-size:.68rem;font-weight:600;color:var(--blue2);letter-spacing:.04em}
+.tab-nav{width:100%;display:flex;justify-content:center;padding:18px 16px 0;gap:6px}
+.tab-btn{flex:1;max-width:160px;padding:10px 8px;border:1px solid var(--border);border-radius:12px;background:var(--white);color:var(--muted);font-size:.73rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);font-family:'Inter',sans-serif}
+.tab-btn:hover{color:var(--text2);border-color:var(--border2)}
+.tab-btn.active{background:linear-gradient(135deg,rgba(96,165,250,0.12),rgba(52,211,153,0.08));border-color:var(--blue);color:var(--blue2);font-weight:700;box-shadow:0 2px 12px rgba(96,165,250,0.15)}
+.page{display:none;width:100%;max-width:520px;padding:20px 16px 50px;flex-direction:column;gap:16px;animation:fadeUp .3s ease}
+.page.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow);transition:box-shadow .25s,border-color .25s}
+.card:hover{box-shadow:var(--shadow-md);border-color:#D6E8FF}
+.card-head{font-size:.67rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.card-head::after{content:'';flex:1;height:1px;background:var(--border)}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:.72rem;color:var(--text2);display:block;margin-bottom:6px;font-weight:500}
+input[type=number],input[type=text]{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:11px;padding:11px 15px;color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:all .2s}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(96,165,250,0.15)}
+input::placeholder{color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profit-block{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:28px 24px;text-align:center;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.profit-block::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(219,234,254,0.3) 0%,rgba(209,250,229,0.15) 100%);pointer-events:none}
+.profit-label{font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.profit-val{font-size:2.8rem;font-weight:800;letter-spacing:-2px;transition:all .35s;line-height:1}
+.profit-val.pos{color:var(--green2)}
+.profit-val.neg{color:var(--red)}
+.profit-val.zero{color:#C4C9D4}
+.profit-sub{font-size:.76rem;color:var(--muted);margin-top:10px;font-weight:400}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;justify-content:center}
+.pill{background:#F8FAFF;border:1px solid var(--border);border-radius:13px;padding:10px 14px;text-align:center;flex:1;min-width:72px;transition:all .2s}
+.pill:hover{background:#EEF4FF;border-color:var(--border2)}
+.pill .pv{font-size:.88rem;font-weight:700;margin-bottom:3px;letter-spacing:-.3px}
+.pill .pl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.status{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-size:.7rem;font-weight:600;letter-spacing:.03em}
+.status.pos{background:rgba(52,211,153,0.1);color:var(--green2);border:1px solid rgba(52,211,153,0.25)}
+.status.neg{background:rgba(248,113,113,0.1);color:#EF4444;border:1px solid rgba(248,113,113,0.2)}
+.status.zero{background:#F3F4F6;color:var(--muted);border:1px solid var(--border)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.result-row:last-child{border-bottom:none}
+.rlabel{font-size:.81rem;color:var(--text2)}
+.rval{font-size:.88rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+.result-row.total{background:linear-gradient(135deg,rgba(96,165,250,0.05),rgba(52,211,153,0.04));margin:6px -22px -22px;padding:14px 22px;border-top:1px solid var(--border);border-radius:0 0 18px 18px;border-bottom:none}
+.oil-bar-wrap{height:7px;background:#F0F4FA;border-radius:4px;overflow:hidden;margin:10px 0 6px}
+.oil-bar-fill{height:100%;border-radius:4px;transition:width .55s cubic-bezier(.4,0,.2,1),background .35s}
+.oil-warn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;font-size:.75rem;font-weight:600;margin-top:10px}
+.oil-warn.green{background:rgba(52,211,153,0.1);color:var(--green2);border:1px solid rgba(52,211,153,0.2)}
+.oil-warn.yellow{background:rgba(251,191,36,0.1);color:#D97706;border:1px solid rgba(251,191,36,0.25)}
+.oil-warn.red{background:rgba(248,113,113,0.1);color:#EF4444;border:1px solid rgba(248,113,113,0.2)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 20px;border-radius:13px;border:none;cursor:pointer;font-size:.87rem;font-weight:700;font-family:'Inter',sans-serif;transition:all .22s;letter-spacing:.01em}
+.btn-save{background:linear-gradient(135deg,var(--blue2),var(--green2));color:#fff;box-shadow:0 2px 12px rgba(96,165,250,0.25)}
+.btn-save:hover{box-shadow:0 4px 20px rgba(96,165,250,0.35);transform:translateY(-1px)}
+.btn-reset{background:var(--white);border:1.5px solid var(--border);color:var(--muted);box-shadow:var(--shadow)}
+.btn-reset:hover{border-color:#FECACA;color:var(--red);background:#FFF8F8}
+.fare-result{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:28px;text-align:center;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.fare-result::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(219,234,254,0.35),rgba(209,250,229,0.2));pointer-events:none}
+.fare-result .fl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-weight:600}
+.fare-result .fv{font-size:2.8rem;font-weight:800;color:var(--blue2);letter-spacing:-2px}
+.fare-result .fs{font-size:.76rem;color:var(--muted);margin-top:8px}
+.seg{display:flex;background:#F3F6FB;border-radius:11px;padding:4px;gap:4px;margin-bottom:16px;border:1px solid var(--border)}
+.seg button{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'Inter',sans-serif}
+.seg button.active{background:var(--white);color:var(--blue2);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.sum-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:16px 10px;text-align:center;box-shadow:var(--shadow);transition:all .25s}
+.sum-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:#D6E8FF}
+.sum-card .sv{font-size:.95rem;font-weight:800;margin-bottom:4px;letter-spacing:-.3px}
+.sum-card .sl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.filter-row{display:flex;gap:6px}
+.filter-btn{flex:1;padding:9px 4px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);color:var(--muted);font-size:.73rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'Inter',sans-serif;box-shadow:var(--shadow)}
+.filter-btn.active{background:linear-gradient(135deg,rgba(96,165,250,0.1),rgba(52,211,153,0.07));border-color:var(--blue);color:var(--blue2)}
+.filter-btn:hover:not(.active){background:#F5F9FF;color:var(--text2)}
+.tbl-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--border);background:var(--white);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:400px;font-size:.78rem}
+th{background:#F8FAFF;padding:11px 14px;text-align:left;color:var(--muted);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFCFF}
+.empty-state{text-align:center;color:var(--muted);padding:36px;font-size:.84rem;background:var(--white);border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.toast{position:fixed;top:20px;right:20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:11px 20px;border-radius:14px;font-size:.83rem;font-weight:600;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(34,197,94,0.25);transform:translateY(-8px);transition:opacity .3s ease,transform .3s ease}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo">🚗</div>
+    <div><h1>Kamran Car</h1><p>Ride Profit Tracker</p></div>
+  </div>
+  <div class="header-badge">PKR · Live</div>
+</header>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('calc',this)">🚕 Ride Calculator</button>
+  <button class="tab-btn" onclick="switchTab('quick',this)">⚡ Quick Deal</button>
+  <button class="tab-btn" onclick="switchTab('reports',this)">📋 Reports</button>
+</div>
+
+<!-- TAB 1 -->
+<div id="tab-calc" class="page active">
+  <div class="profit-block">
+    <div style="display:flex;justify-content:center;margin-bottom:14px">
+      <div class="status zero" id="statusBadge"><div class="dot"></div><span id="statusText">Waiting for input</span></div>
+    </div>
+    <div class="profit-label">Net Profit</div>
+    <div class="profit-val zero" id="profitVal">PKR 0</div>
+    <div class="profit-sub" id="profitPerKm">Profit per KM &nbsp;—</div>
+    <div class="pills">
+      <div class="pill"><div class="pv" id="p_fare" style="color:var(--blue2)">—</div><div class="pl">Fare</div></div>
+      <div class="pill"><div class="pv" id="p_petrol" style="color:#D97706">—</div><div class="pl">Petrol</div></div>
+      <div class="pill"><div class="pv" id="p_oil" style="color:var(--muted)">—</div><div class="pl">Oil</div></div>
+      <div class="pill"><div class="pv" id="p_expense" style="color:var(--red)">—</div><div class="pl">Total Exp</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📋 Ride Details</div>
+    <div class="field"><label style="color:var(--green2);font-weight:600">Customer Name</label><input id="i_name" type="text" placeholder="e.g. Ahmed, Office Drop" oninput="calc()"></div>
+    <div class="field"><label><span style="color:var(--green2);font-weight:600">City</span> <span style="color:var(--text2)">(optional)</span></label><input id="i_city" type="text" placeholder="e.g. Lahore" oninput="calc()"></div>
+    <div class="field"><label>Fare Received (PKR)</label><input id="i_fare" type="number" min="0" placeholder="0" oninput="calc()"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">⛽ Fuel Info</div>
+    <div class="grid2">
+      <div class="field"><label>Total KM Driven</label><input id="i_km" type="number" min="0" placeholder="0" oninput="calc()"></div>
+      <div class="field"><label>Petrol Price (PKR/L)</label><input id="i_price" type="number" min="0" placeholder="290" oninput="calc()"></div>
+    </div>
+    <div class="field"><label>Fuel Average (km/L)</label><input id="i_avg" type="number" min="1" placeholder="19" value="19" oninput="calc()"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">💸 Extra Expenses</div>
+    <div class="grid2">
+      <div class="field"><label>Parking (PKR)</label><input id="i_parking" type="number" min="0" placeholder="0" oninput="calc()"></div>
+      <div class="field"><label>Toll Tax (PKR)</label><input id="i_toll" type="number" min="0" placeholder="0" oninput="calc()"></div>
+    </div>
+    <div class="field"><label>Maintenance (PKR)</label><input id="i_maintenance" type="number" min="0" placeholder="0" oninput="calc()"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📊 Calculation Breakdown</div>
+    <div class="result-row"><span class="rlabel">⛽ Petrol Used</span><span class="rval" id="r_liters">— L</span></div>
+    <div class="result-row"><span class="rlabel">💰 Petrol Cost</span><span class="rval" id="r_petrolCost">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🛢 Oil Cost <span style="font-size:.67rem;color:var(--muted)">@ 1.33/km</span></span><span class="rval" id="r_oilCost">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🅿 Parking</span><span class="rval" id="r_parking">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🛣 Toll Tax</span><span class="rval" id="r_toll">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🔧 Maintenance</span><span class="rval" id="r_maintenance">PKR 0</span></div>
+    <div class="result-row total">
+      <span class="rlabel" style="color:var(--text);font-weight:700;font-size:.88rem">📦 Total Expense</span>
+      <span class="rval" style="color:var(--red);font-size:.95rem;font-weight:700" id="r_totalExp">PKR 0</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🛢 Oil Change Tracker</div>
+    <div class="grid2">
+      <div class="field"><label>Current KM Reading</label><input id="i_cur_km" type="number" min="0" placeholder="e.g. 47200" oninput="calcOil()"></div>
+      <div class="field"><label>Next Oil Change KM</label><input id="i_next_km" type="number" min="0" placeholder="e.g. 49000" oninput="calcOil()"></div>
+    </div>
+    <div id="oil-display" style="display:none">
+      <div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin:6px 0 3px">
+        <span id="oil-cur-label">—</span><span id="oil-pct-label">0%</span>
+      </div>
+      <div class="oil-bar-wrap"><div class="oil-bar-fill" id="oil-bar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-bottom:10px">
+        <span>0 km</span><span id="oil-next-label">—</span>
+      </div>
+      <div id="oil-warn-badge" class="oil-warn green">✅ Safe</div>
+      <div class="result-row" style="margin-top:8px"><span class="rlabel">Next Oil Change At</span><span class="rval" id="oil-next">—</span></div>
+      <div class="result-row"><span class="rlabel">KM Remaining</span><span class="rval" id="oil-remaining">—</span></div>
+    </div>
+  </div>
+
+  <button class="btn btn-save" onclick="saveRide()">💾 Save Ride to Reports</button>
+  <button class="btn btn-reset" onclick="resetAll()" style="margin-top:-4px">🔄 Reset All Fields</button>
+</div>
+
+<!-- TAB 2 -->
+<div id="tab-quick" class="page">
+  <div class="fare-result">
+    <div class="fl">Recommended Fare</div>
+    <div class="fv" id="q_fare">PKR —</div>
+    <div class="fs" id="q_sub">Enter trip details to calculate</div>
+  </div>
+  <div class="card">
+    <div class="card-head">📍 Trip Details</div>
+    <div class="grid2">
+      <div class="field"><label>Distance (KM)</label><input id="q_km" type="number" min="0" placeholder="0" oninput="calcQuick()"></div>
+      <div class="field"><label>Petrol Price (PKR/L)</label><input id="q_price" type="number" min="0" placeholder="290" oninput="calcQuick()"></div>
+    </div>
+    <div class="field"><label>Fuel Average (km/L)</label><input id="q_avg" type="number" min="1" placeholder="19" value="19" oninput="calcQuick()"></div>
+    <div class="grid2">
+      <div class="field"><label>Toll Tax (PKR)</label><input id="q_toll" type="number" min="0" placeholder="0" oninput="calcQuick()"></div>
+      <div class="field"><label>Extra Cost (PKR)</label><input id="q_extra" type="number" min="0" placeholder="0" oninput="calcQuick()"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">🎯 Desired Profit</div>
+    <div class="seg">
+      <button class="active" id="profit-mode-pkr" onclick="setProfitMode('pkr')">PKR Amount</button>
+      <button id="profit-mode-pct" onclick="setProfitMode('pct')">% Margin</button>
+    </div>
+    <div class="field" id="profit-pkr-field"><label>Profit Amount (PKR)</label><input id="q_profit_pkr" type="number" min="0" placeholder="500" oninput="calcQuick()"></div>
+    <div class="field" id="profit-pct-field" style="display:none"><label>Profit Margin (%)</label><input id="q_profit_pct" type="number" min="0" max="100" placeholder="20" oninput="calcQuick()"></div>
+  </div>
+  <div class="card">
+    <div class="card-head">📊 Cost Breakdown</div>
+    <div class="result-row"><span class="rlabel">⛽ Petrol Used</span><span class="rval" id="q_liters">— L</span></div>
+    <div class="result-row"><span class="rlabel">💰 Petrol Cost</span><span class="rval" id="q_petrol">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🛢 Oil Cost</span><span class="rval" id="q_oil">PKR 0</span></div>
+    <div class="result-row"><span class="rlabel">🛣 Toll + Extra</span><span class="rval" id="q_other">PKR 0</span></div>
+    <div class="result-row total">
+      <span class="rlabel" style="color:var(--text);font-weight:700;font-size:.88rem">📦 Total Cost</span>
+      <span class="rval" style="color:var(--red);font-size:.95rem;font-weight:700" id="q_total">PKR 0</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3 -->
+<div id="tab-reports" class="page">
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sv" id="rpt_today" style="color:var(--green2)">PKR 0</div><div class="sl">Today</div></div>
+    <div class="sum-card"><div class="sv" id="rpt_week" style="color:var(--blue2)">PKR 0</div><div class="sl">This Week</div></div>
+    <div class="sum-card"><div class="sv" id="rpt_month" style="color:#D97706">PKR 0</div><div class="sl">This Month</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head">🔍 Filter</div>
+    <div class="filter-row">
+      <button class="filter-btn active" id="f_today" onclick="setFilter('today')">Today</button>
+      <button class="filter-btn" id="f_week" onclick="setFilter('week')">Week</button>
+      <button class="filter-btn" id="f_month" onclick="setFilter('month')">Month</button>
+      <button class="filter-btn" id="f_all" onclick="setFilter('all')">All</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Customer</th><th>KM</th><th>Fare</th><th>Expense</th><th>Profit</th></tr></thead>
+      <tbody id="rpt_table"></tbody>
+    </table>
+  </div>
+  <div id="rpt_empty" class="empty-state" style="display:none">No rides saved yet.<br><span style="font-size:.75rem;opacity:.6">Use the Ride Calculator to save rides.</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <button class="btn btn-reset" onclick="exportData()" style="border-color:var(--border2);color:var(--blue2)">⬇ Export JSON</button>
+    <label class="btn btn-reset" style="border-color:var(--border2);color:var(--green2);cursor:pointer;margin:0">
+      ⬆ Import JSON<input type="file" accept=".json" onchange="importData(event)" style="display:none">
+    </label>
+  </div>
+  <button class="btn btn-reset" onclick="exportPDF()" style="border-color:#D1FAE5;color:var(--green2)">📄 Export PDF</button>
+  <button class="btn btn-reset" onclick="clearReports()">🗑 Clear All Report Data</button>
+</div>
+
+<!-- PDF RANGE MODAL -->
+<div id="pdf-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.35);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border:1px solid #E8EDF5;border-radius:20px;padding:28px 24px;max-width:340px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.12);animation:fadeUp .25s ease">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <p style="font-size:1rem;font-weight:700;color:#1A1A2E">📄 Export PDF</p>
+      <button onclick="hidePdfModal()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#9CA3AF;line-height:1">✕</button>
+    </div>
+    <p style="font-size:.75rem;color:#6B7280;margin-bottom:14px;font-weight:500;text-transform:uppercase;letter-spacing:.06em">Select Date Range</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+      <label id="pdf-opt-today" onclick="selectPdfOpt('today')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;border:1.5px solid #E8EDF5;cursor:pointer;transition:.2s;font-size:.85rem;color:#1A1A2E;font-weight:500">
+        <span style="width:16px;height:16px;border-radius:50%;border:2px solid #60A5FA;display:flex;align-items:center;justify-content:center" id="r-today"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;display:none" id="rd-today"></span></span>Today
+      </label>
+      <label id="pdf-opt-week" onclick="selectPdfOpt('week')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;border:1.5px solid #E8EDF5;cursor:pointer;transition:.2s;font-size:.85rem;color:#1A1A2E;font-weight:500">
+        <span style="width:16px;height:16px;border-radius:50%;border:2px solid #60A5FA;display:flex;align-items:center;justify-content:center" id="r-week"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;display:none" id="rd-week"></span></span>This Week
+      </label>
+      <label id="pdf-opt-month" onclick="selectPdfOpt('month')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;border:1.5px solid #E8EDF5;cursor:pointer;transition:.2s;font-size:.85rem;color:#1A1A2E;font-weight:500">
+        <span style="width:16px;height:16px;border-radius:50%;border:2px solid #60A5FA;display:flex;align-items:center;justify-content:center" id="r-month"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;display:none" id="rd-month"></span></span>This Month
+      </label>
+      <label id="pdf-opt-custom" onclick="selectPdfOpt('custom')" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;border:1.5px solid #E8EDF5;cursor:pointer;transition:.2s;font-size:.85rem;color:#1A1A2E;font-weight:500">
+        <span style="width:16px;height:16px;border-radius:50%;border:2px solid #60A5FA;display:flex;align-items:center;justify-content:center" id="r-custom"><span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;display:none" id="rd-custom"></span></span>Custom Range
+      </label>
+    </div>
+    <div id="pdf-custom-range" style="display:none;margin-bottom:18px;display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label style="font-size:.7rem;color:#6B7280;display:block;margin-bottom:5px;font-weight:500">From</label>
+          <input type="date" id="pdf-from" style="width:100%;background:#fff;border:1.5px solid #E8EDF5;border-radius:10px;padding:9px 12px;color:#1A1A2E;font-size:.82rem;font-family:Inter,sans-serif;outline:none">
+        </div>
+        <div>
+          <label style="font-size:.7rem;color:#6B7280;display:block;margin-bottom:5px;font-weight:500">To</label>
+          <input type="date" id="pdf-to" style="width:100%;background:#fff;border:1.5px solid #E8EDF5;border-radius:10px;padding:9px 12px;color:#1A1A2E;font-size:.82rem;font-family:Inter,sans-serif;outline:none">
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button onclick="hidePdfModal()" style="padding:11px;border-radius:12px;border:1.5px solid #E8EDF5;background:#fff;color:#6B7280;font-size:.86rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Cancel</button>
+      <button onclick="generatePDF()" style="padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#3B82F6,#10B981);color:#fff;font-size:.86rem;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 10px rgba(59,130,246,0.25)">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.35);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border:1px solid #E8EDF5;border-radius:20px;padding:28px 24px;max-width:320px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.12);text-align:center;animation:fadeUp .25s ease">
+    <div style="width:44px;height:44px;background:#FEF2F2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.2rem">🗑</div>
+    <p style="font-size:1rem;font-weight:700;color:#1A1A2E;margin-bottom:8px">Delete all data?</p>
+    <p style="font-size:.83rem;color:#6B7280;margin-bottom:24px;line-height:1.5">Are you sure you want to delete all report data? This action cannot be undone.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button onclick="hideConfirm()" style="padding:11px;border-radius:12px;border:1.5px solid #E8EDF5;background:#fff;color:#6B7280;font-size:.86rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Cancel</button>
+      <button onclick="confirmClear()" style="padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#F87171,#EF4444);color:#fff;font-size:.86rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 2px 10px rgba(239,68,68,0.25)">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var OIL_PER_KM = 1.33;
+var profitMode = 'pkr';
+var activeFilter = 'today';
+var undoTimer = null;
+
+function g(id) { return document.getElementById(id); }
+function n(id) { return parseFloat(g(id).value) || 0; }
+function fmt(v) { return 'PKR ' + Math.round(v).toLocaleString('en-PK'); }
+function fmtS(v) { return Math.round(v).toLocaleString('en-PK'); }
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+function getRides() {
+  try { return JSON.parse(localStorage.getItem('kc_rides') || '[]'); } catch(e) { return []; }
+}
+function setRides(rides) {
+  localStorage.setItem('kc_rides', JSON.stringify(rides));
+}
+
+function showToast(msg, bg) {
+  var t = g('toast');
+  t.innerHTML = msg;
+  t.style.background = bg || 'linear-gradient(135deg,#22c55e,#16a34a)';
+  t.classList.add('show');
+}
+function hideToast() {
+  var t = g('toast');
+  t.classList.remove('show');
+}
+function toast(msg, bg) {
+  showToast(msg, bg);
+  setTimeout(hideToast, 2300);
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  g('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'reports') renderReports();
+}
+
+function calc() {
+  var fare = n('i_fare'), km = n('i_km'), price = n('i_price');
+  var parking = n('i_parking'), toll = n('i_toll'), maint = n('i_maintenance');
+  var avg = parseFloat(g('i_avg').value) || 19;
+  var liters = km / avg, petrol = liters * price, oil = km * OIL_PER_KM;
+  var totalExp = petrol + oil + parking + toll + maint;
+  var profit = fare - totalExp;
+  var profitKm = km > 0 ? profit / km : null;
+
+  g('r_liters').textContent = liters > 0 ? liters.toFixed(2) + ' L' : '— L';
+  g('r_petrolCost').textContent = fmt(petrol);
+  g('r_oilCost').textContent = fmt(oil);
+  g('r_parking').textContent = fmt(parking);
+  g('r_toll').textContent = fmt(toll);
+  g('r_maintenance').textContent = fmt(maint);
+  g('r_totalExp').textContent = fmt(totalExp);
+  g('p_fare').textContent = fare > 0 ? fmtS(fare) : '—';
+  g('p_petrol').textContent = petrol > 0 ? fmtS(petrol) : '—';
+  g('p_oil').textContent = oil > 0 ? fmtS(oil) : '—';
+  g('p_expense').textContent = totalExp > 0 ? fmtS(totalExp) : '—';
+
+  var pv = g('profitVal'), sb = g('statusBadge'), st = g('statusText');
+  if (!fare && !km) {
+    pv.textContent = 'PKR 0'; pv.className = 'profit-val zero';
+    sb.className = 'status zero'; st.textContent = 'Waiting for input';
+    g('profitPerKm').textContent = 'Profit per KM  —';
+  } else {
+    pv.textContent = fmt(profit);
+    if (profit > 0) { pv.className = 'profit-val pos'; sb.className = 'status pos'; st.textContent = 'Profitable Ride ✓'; }
+    else if (profit < 0) { pv.className = 'profit-val neg'; sb.className = 'status neg'; st.textContent = 'Running at Loss'; }
+    else { pv.className = 'profit-val zero'; sb.className = 'status zero'; st.textContent = 'Break Even'; }
+    g('profitPerKm').textContent = profitKm !== null ? 'Profit per KM  PKR ' + profitKm.toFixed(1) : 'Profit per KM  —';
+  }
+}
+
+function calcOil() {
+  var cur = n('i_cur_km'), next = n('i_next_km');
+  if (!cur && !next) { g('oil-display').style.display = 'none'; return; }
+  g('oil-display').style.display = 'block';
+  var remaining = next - cur;
+  var pct = next > 0 ? Math.min((cur / next) * 100, 100) : 100;
+  var bar = g('oil-bar'); bar.style.width = pct + '%';
+  var col, wc, wt;
+  if (remaining <= 0) { col = '#EF4444'; wc = 'red'; wt = '🚨 Change Oil Now!'; }
+  else if (remaining <= 300) { col = '#EF4444'; wc = 'red'; wt = '🔴 Urgent — ' + remaining.toLocaleString() + ' km left'; }
+  else if (remaining <= 1000) { col = '#D97706'; wc = 'yellow'; wt = '⚠️ Service Near — ' + remaining.toLocaleString() + ' km left'; }
+  else { col = '#10B981'; wc = 'green'; wt = '✅ Safe — ' + remaining.toLocaleString() + ' km to go'; }
+  bar.style.background = col;
+  g('oil-warn-badge').className = 'oil-warn ' + wc;
+  g('oil-warn-badge').textContent = wt;
+  g('oil-cur-label').textContent = 'Current: ' + cur.toLocaleString() + ' km';
+  g('oil-pct-label').textContent = pct.toFixed(1) + '%';
+  g('oil-next-label').textContent = next > 0 ? next.toLocaleString() + ' km' : '—';
+  g('oil-next').textContent = next > 0 ? next.toLocaleString() + ' km' : '—';
+  g('oil-remaining').textContent = remaining > 0 ? remaining.toLocaleString() + ' km' : 'Overdue';
+  g('oil-remaining').style.color = remaining <= 0 ? '#EF4444' : remaining <= 300 ? '#EF4444' : remaining <= 1000 ? '#D97706' : '#10B981';
+}
+
+function saveRide() {
+  var fare = n('i_fare'), km = n('i_km'), price = n('i_price');
+  var parking = n('i_parking'), toll = n('i_toll'), maint = n('i_maintenance');
+  if (!fare && !km) { toast('Enter fare & KM to save!', 'linear-gradient(135deg,#F87171,#DC2626)'); return; }
+  var avg = parseFloat(g('i_avg').value) || 19;
+  var petrol = (km / avg) * price, oil = km * OIL_PER_KM;
+  var totalExp = petrol + oil + parking + toll + maint;
+  var ride = { date: todayStr(), customer: g('i_name').value || '—', city: g('i_city').value || '', km: km, fare: fare, expense: totalExp, profit: fare - totalExp, ts: Date.now() };
+  var rides = getRides(); rides.push(ride); setRides(rides);
+  toast('💾 Data Saved!');
+}
+
+function resetAll() {
+  ['i_name','i_city','i_fare','i_km','i_price','i_parking','i_toll','i_maintenance','i_cur_km','i_next_km'].forEach(function(id) { g(id).value = ''; });
+  g('i_avg').value = '19';
+  g('oil-display').style.display = 'none';
+  calc();
+}
+
+function setProfitMode(m) {
+  profitMode = m;
+  g('profit-pkr-field').style.display = m === 'pkr' ? 'block' : 'none';
+  g('profit-pct-field').style.display = m === 'pct' ? 'block' : 'none';
+  g('profit-mode-pkr').classList.toggle('active', m === 'pkr');
+  g('profit-mode-pct').classList.toggle('active', m === 'pct');
+  calcQuick();
+}
+
+function calcQuick() {
+  var km = n('q_km'), price = n('q_price'), toll = n('q_toll'), extra = n('q_extra');
+  var avg = parseFloat(g('q_avg').value) || 19;
+  var liters = km / avg, petrol = liters * price, oil = km * OIL_PER_KM;
+  var totalCost = petrol + oil + toll + extra;
+  g('q_liters').textContent = liters > 0 ? liters.toFixed(2) + ' L' : '— L';
+  g('q_petrol').textContent = fmt(petrol);
+  g('q_oil').textContent = fmt(oil);
+  g('q_other').textContent = fmt(toll + extra);
+  g('q_total').textContent = fmt(totalCost);
+  var pct = n('q_profit_pct') / 100;
+  var recFare = profitMode === 'pkr' ? totalCost + n('q_profit_pkr') : (pct > 0 ? totalCost / (1 - pct) : totalCost);
+  if (km && price) {
+    g('q_fare').textContent = fmt(recFare);
+    g('q_sub').textContent = 'Cost: ' + fmt(totalCost) + '  ·  Profit: ' + fmt(recFare - totalCost);
+  } else {
+    g('q_fare').textContent = 'PKR —';
+    g('q_sub').textContent = 'Enter trip details to calculate';
+  }
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  ['today','week','month','all'].forEach(function(t) { g('f_' + t).classList.toggle('active', t === f); });
+  renderReports();
+}
+
+function inRange(dateStr, filter) {
+  var d = new Date(dateStr + 'T00:00:00'), now = new Date();
+  if (filter === 'today') return dateStr === todayStr();
+  if (filter === 'week') { var s = new Date(now); s.setDate(now.getDate() - now.getDay()); s.setHours(0,0,0,0); return d >= s; }
+  if (filter === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  return true;
+}
+
+function profitColor(p) {
+  if (p < 0) return '#EF4444';
+  if (p < 500) return '#EAB308';
+  if (p < 1500) return '#86EFAC';
+  return '#16a34a';
+}
+
+function renderReports() {
+  var rides = getRides();
+  function sumFor(f) { return rides.filter(function(r) { return inRange(r.date, f); }).reduce(function(s,r) { return s + r.profit; }, 0); }
+  var td = sumFor('today'), wk = sumFor('week'), mo = sumFor('month');
+  g('rpt_today').textContent = fmt(td); g('rpt_today').style.color = td >= 0 ? 'var(--green2)' : 'var(--red)';
+  g('rpt_week').textContent = fmt(wk); g('rpt_week').style.color = wk >= 0 ? 'var(--blue2)' : 'var(--red)';
+  g('rpt_month').textContent = fmt(mo); g('rpt_month').style.color = mo >= 0 ? '#D97706' : 'var(--red)';
+  var filtered = rides.filter(function(r) { return inRange(r.date, activeFilter); }).sort(function(a,b) { return b.ts - a.ts; });
+  var tbody = g('rpt_table');
+  if (!filtered.length) { tbody.innerHTML = ''; g('rpt_empty').style.display = 'block'; return; }
+  g('rpt_empty').style.display = 'none';
+  tbody.innerHTML = filtered.map(function(r) {
+    return '<tr><td>' + r.date + '</td><td>' + r.customer + (r.city ? ' <span style="color:var(--muted);font-size:.68rem">' + r.city + '</span>' : '') + '</td><td>' + r.km + '</td><td>' + fmtS(r.fare) + '</td><td style="color:var(--red)">' + fmtS(r.expense) + '</td><td style="font-weight:700;color:' + profitColor(r.profit) + '">' + fmtS(r.profit) + '</td></tr>';
+  }).join('');
+}
+
+function exportData() {
+  var rides = getRides();
+  if (!rides.length) { toast('No data to export', 'linear-gradient(135deg,#F87171,#DC2626)'); return; }
+  var blob = new Blob([JSON.stringify(rides, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kamran_car_rides_' + todayStr() + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('✅ Data exported!');
+}
+
+function importData(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error('Not an array');
+      var existing = getRides();
+      var merged = existing.concat(data.filter(function(d) { return !existing.some(function(r) { return r.ts === d.ts; }); }));
+      setRides(merged); renderReports();
+      toast('✅ Imported ' + data.length + ' rides!');
+    } catch(err) {
+      toast('❌ Invalid JSON file', 'linear-gradient(135deg,#F87171,#DC2626)');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+var pdfOpt = 'today';
+
+function showPdfModal() {
+  var rides = getRides();
+  if (!rides.length) { toast('No data to export', 'linear-gradient(135deg,#F87171,#DC2626)'); return; }
+  pdfOpt = 'today';
+  selectPdfOpt('today');
+  var t = todayStr();
+  g('pdf-from').value = t; g('pdf-to').value = t;
+  g('pdf-overlay').style.display = 'flex';
+}
+function hidePdfModal() { g('pdf-overlay').style.display = 'none'; }
+
+function selectPdfOpt(opt) {
+  pdfOpt = opt;
+  ['today','week','month','custom'].forEach(function(o) {
+    var lbl = g('pdf-opt-' + o);
+    var dot = g('rd-' + o);
+    lbl.style.borderColor = o === opt ? '#3B82F6' : '#E8EDF5';
+    lbl.style.background = o === opt ? 'rgba(96,165,250,0.06)' : '#fff';
+    dot.style.display = o === opt ? 'block' : 'none';
+  });
+  g('pdf-custom-range').style.display = opt === 'custom' ? 'block' : 'none';
+}
+
+function getPdfDateRange() {
+  var now = new Date(), t = todayStr();
+  if (pdfOpt === 'today') return { from: t, to: t, label: fmtLabel(t) + ' – ' + fmtLabel(t) };
+  if (pdfOpt === 'week') {
+    var s = new Date(now); s.setDate(now.getDate() - now.getDay()); s.setHours(0,0,0,0);
+    var e = new Date(s); e.setDate(s.getDate() + 6);
+    return { from: s.toISOString().split('T')[0], to: e.toISOString().split('T')[0], label: fmtLabel(s.toISOString().split('T')[0]) + ' – ' + fmtLabel(e.toISOString().split('T')[0]) };
+  }
+  if (pdfOpt === 'month') {
+    var ms = new Date(now.getFullYear(), now.getMonth(), 1);
+    var me = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return { from: ms.toISOString().split('T')[0], to: me.toISOString().split('T')[0], label: ms.toLocaleDateString('en-PK',{month:'long',year:'numeric'}) };
+  }
+  var f = g('pdf-from').value, tt = g('pdf-to').value;
+  if (!f || !tt) return null;
+  return { from: f, to: tt, label: fmtLabel(f) + ' – ' + fmtLabel(tt) };
+}
+
+function fmtLabel(d) {
+  return new Date(d + 'T00:00:00').toLocaleDateString('en-PK', { day: 'numeric', month: 'short' });
+}
+
+function generatePDF() {
+  var range = getPdfDateRange();
+  if (!range) { toast('Please select a valid date range', 'linear-gradient(135deg,#F87171,#DC2626)'); return; }
+  var rides = getRides().filter(function(r) { return r.date >= range.from && r.date <= range.to; });
+  if (!rides.length) { toast('No rides in selected range', 'linear-gradient(135deg,#F87171,#DC2626)'); return; }
+  hidePdfModal();
+
+  var totalProfit = rides.reduce(function(s,r){return s+r.profit;},0);
+  var totalFare   = rides.reduce(function(s,r){return s+r.fare;},0);
+  var totalExp    = rides.reduce(function(s,r){return s+r.expense;},0);
+  var sorted = rides.slice().sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+
+  function pkr(v){return 'PKR '+Math.round(v).toLocaleString('en-PK');}
+  function pc(p){return p<0?'#DC2626':p<500?'#CA8A04':p<1500?'#16A34A':'#15803D';}
+
+  var rows = sorted.map(function(r,i){
+    return '<tr style="background:'+(i%2===0?'#F8FAFF':'#fff')+'"><td>'+r.date+'</td><td>'+r.customer+(r.city?' ('+r.city+')':'')+'</td><td style="text-align:center">'+r.km+'</td><td style="text-align:right">'+pkr(r.fare)+'</td><td style="text-align:right;color:#DC2626">'+pkr(r.expense)+'</td><td style="text-align:right;font-weight:700;color:'+pc(r.profit)+'">'+pkr(r.profit)+'</td></tr>';
+  }).join('');
+
+  var genDate = new Date().toLocaleDateString('en-PK',{day:'numeric',month:'long',year:'numeric'});
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Kamran Car Report</title>'
+  +'<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Segoe UI,Arial,sans-serif;color:#1A1A2E;padding:36px;font-size:13px}'
+  +'.header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #3B82F6;padding-bottom:14px;margin-bottom:6px}'
+  +'.logo{font-size:20px;font-weight:800}.logo span{color:#3B82F6}.meta{font-size:11px;color:#6B7280;text-align:right;line-height:1.8}'
+  +'.range-badge{display:inline-block;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;border-radius:8px;padding:5px 14px;font-size:12px;font-weight:700;margin:12px 0 20px}'
+  +'.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}'
+  +'.sum-box{background:#F8FAFF;border:1px solid #E8EDF5;border-radius:10px;padding:13px;text-align:center}'
+  +'.sum-box .val{font-size:15px;font-weight:800;margin-bottom:3px}.sum-box .lbl{font-size:10px;color:#6B7280;text-transform:uppercase;letter-spacing:.06em}'
+  +'table{width:100%;border-collapse:collapse}th{background:#3B82F6;color:#fff;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}'
+  +'th:nth-child(3){text-align:center}th:nth-child(4),th:nth-child(5),th:nth-child(6){text-align:right}'
+  +'td{padding:9px 12px;border-bottom:1px solid #EEF2FF;font-size:12px}.total-row{background:#EEF2FF!important;font-weight:700}'
+  +'.footer{margin-top:22px;font-size:10px;color:#9CA3AF;text-align:center}</style></head><body>'
+  +'<div class="header"><div><div class="logo">🚗 Kamran <span>Car</span></div><div style="font-size:11px;color:#6B7280;margin-top:3px">Ride Profit Report</div></div>'
+  +'<div class="meta">Generated: '+genDate+'<br>Total Rides: '+rides.length+'</div></div>'
+  +'<div class="range-badge">📅 '+range.label+'</div>'
+  +'<div class="summary">'
+  +'<div class="sum-box"><div class="val" style="color:#3B82F6">'+rides.length+'</div><div class="lbl">Rides</div></div>'
+  +'<div class="sum-box"><div class="val" style="color:#16A34A">'+pkr(totalFare)+'</div><div class="lbl">Total Fare</div></div>'
+  +'<div class="sum-box"><div class="val" style="color:#DC2626">'+pkr(totalExp)+'</div><div class="lbl">Total Expense</div></div>'
+  +'<div class="sum-box"><div class="val" style="color:'+(totalProfit>=0?'#15803D':'#DC2626')+'">'+pkr(totalProfit)+'</div><div class="lbl">Net Profit</div></div>'
+  +'</div>'
+  +'<table><thead><tr><th>Date</th><th>Customer</th><th>KM</th><th>Fare</th><th>Expense</th><th>Profit</th></tr></thead>'
+  +'<tbody>'+rows
+  +'<tr class="total-row"><td colspan="2">TOTAL</td><td style="text-align:center">—</td><td style="text-align:right">'+pkr(totalFare)+'</td><td style="text-align:right;color:#DC2626">'+pkr(totalExp)+'</td><td style="text-align:right;color:'+(totalProfit>=0?'#15803D':'#DC2626')+'">'+pkr(totalProfit)+'</td></tr>'
+  +'</tbody></table>'
+  +'<div class="footer">Kamran Car · Ride Profit Tracker · '+range.label+' · Generated '+todayStr()+'</div>'
+  +'</body></html>';
+
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'KamranCar_Report_'+todayStr()+'.html';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(a.href);
+  toast('✅ Report downloaded!');
+}
+
+function exportPDF() { showPdfModal(); }
+
+function clearReports() { g('confirm-overlay').style.display = 'flex'; }
+function hideConfirm() { g('confirm-overlay').style.display = 'none'; }
+
+function confirmClear() {
+  var backup = getRides();
+  localStorage.setItem('kc_rides_backup', JSON.stringify(backup));
+  setRides([]); hideConfirm(); renderReports();
+  var t = g('toast');
+  t.innerHTML = 'Data deleted &nbsp;<button onclick="undoClear()" style="background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.4);color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:8px;cursor:pointer;font-family:Inter,sans-serif;margin-left:4px">Undo</button> <span id="undo-count" style="font-size:.75rem;opacity:.8">(5s)</span>';
+  t.style.background = 'linear-gradient(135deg,#F87171,#DC2626)';
+  t.classList.add('show');
+  var sec = 5;
+  clearInterval(undoTimer);
+  undoTimer = setInterval(function() {
+    sec--;
+    var el = document.getElementById('undo-count');
+    if (el) el.textContent = '(' + sec + 's)';
+    if (sec <= 0) {
+      clearInterval(undoTimer);
+      hideToast();
+      localStorage.removeItem('kc_rides_backup');
+      setTimeout(function() { g('toast').innerHTML = ''; }, 350);
+    }
+  }, 1000);
+}
+
+function undoClear() {
+  clearInterval(undoTimer);
+  var backup = JSON.parse(localStorage.getItem('kc_rides_backup') || '[]');
+  setRides(backup);
+  localStorage.removeItem('kc_rides_backup');
+  renderReports();
+  hideToast();
+  setTimeout(function() { toast('✅ Restored!'); }, 100);
+}
+
+calc(); calcQuick(); renderReports();
+</script>
+</body>
+</html>
